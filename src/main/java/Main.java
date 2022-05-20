@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 public class Main extends PApplet
 {
     // Le https ne fonctionnant pas avec processing, je prend les fichiers dans les ressources... cela ne change pas grand choses
-    private static final String[] DEP_URL = {"resultats-par-niveau-dpt-t1-france-entiere.csv", "resultats-par-niveau-dpt-t2-france-entiere.txt"};
+    private static final String[] DEP_URL = {"resultats-par-niveau-dpt-t1-france-entiere.txt", "resultats-par-niveau-dpt-t2-france-entiere.txt"};
     private static final String[] REG_URL = {"resultats-par-niveau-reg-t1-france-entiere.txt", "resultats-par-niveau-reg-t2-france-entiere.txt"};
 
     private static final float RATIO = 2;
