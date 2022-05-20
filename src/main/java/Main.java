@@ -49,8 +49,15 @@ public class Main extends PApplet
 
             if(Math.sqrt(Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2)) < diametre/2)
             {
+                String text = datas.getString(i+1, isDepartement ? 1 : 0);
+                rect(mouseX - 1, mouseY - textAscent(), textWidth(text) + 2, textAscent()*1.5f);
+
                 fill(0);
-                text(datas.getString(i+1, isDepartement ? 1 : 0), mouseX, mouseY);
+                text(text, mouseX, mouseY);
+
+                fill(255);
+
+                drawCamenbert(i+1);
             }
         }
     }
@@ -66,8 +73,13 @@ public class Main extends PApplet
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+    }
+
+    private void drawCamenbert(int lig)
+    {
+        ellipse(mouseX + 100, mouseY + 100, 200, 200);
     }
 
     private Table fetchRoundDatas() throws IOException
@@ -91,7 +103,7 @@ public class Main extends PApplet
 
             for (int i = 0; i <= nbCandidats; i++)
             {
-                firstLine += "Nom prénom\t% voix" + (i < nbCandidats ? "\t" : "\n");
+                firstLine += "Nom prénom\tnb voix\t% voix" + (i < nbCandidats ? "\t" : "\n");
             }
 
             writer.write(firstLine);
@@ -112,11 +124,10 @@ public class Main extends PApplet
 
                 for (int i = 0; i <= nbCandidats; i++)
                 {
-                    newLine += cols[index] + " " + cols[index+1] + "\t";
+                    for (int j = 0; j < 4; j++)
+                        newLine += cols[index++] + (j == 0 ? " " : "\t");
 
-                    newLine += cols[index+3] + "\t";
-
-                    index += 6;
+                    index += 2;
                 }
 
                 writer.write(newLine + "\n");
