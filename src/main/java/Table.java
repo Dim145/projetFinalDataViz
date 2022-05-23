@@ -110,7 +110,12 @@ public class Table
 
     public float getFloat(int rowIndex, int column)
     {
-        return PApplet.parseFloat(getString(rowIndex, column));
+        String s = getString(rowIndex, column);
+
+        if(s != null)
+            s = s.replaceAll(",", ".");
+
+        return PApplet.parseFloat(s);
     }
 
 
