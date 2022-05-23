@@ -49,6 +49,15 @@ public class Main extends PApplet
         background(255);
         image(background, 0, 0, width, height);
 
+        String tmpText = "Tour: " + this.currentTour + "\nVue " + (isDepartement ? "départementale" : "régionnale");
+
+        fill(0);
+        text(tmpText, width - 5 - textWidth(tmpText), height - textAscent()*2 - 5);
+
+        tmpText = "cliquez pour changer de tour.\nappuyez sur espace pour changer de vue.";
+
+        text(tmpText, 5, height - textAscent()*2 - 5);
+
         for (int i = 1; i < datas.getRowCount(); i++)
         {
             int baseCoordColIndex = isDepartement ? 2 : 1;
@@ -151,7 +160,7 @@ public class Main extends PApplet
                 float posNameX = camCenterX + ((RAYON_CAMEMBERT/2 + 10) * cosVal) - (cosVal < 0 ? textWidth(text) : 0);
                 float posNameY = camCenterY + ((RAYON_CAMEMBERT/2 + 10) * sinVal);
 
-                textPosList.add(new TextPos(text, posNameX, posNameY, COLORS[(index/3) % COLORS.length]));
+                textPosList.add(new TextPos(text, posNameX, posNameY, COLORS[(index / 3) % COLORS.length]));
             }
 
 
@@ -163,6 +172,14 @@ public class Main extends PApplet
             break;
         }
 
+        if(total > 0)
+        {
+            fill(Color.WHITE.getRGB());
+            arc(camCenterX, camCenterY, DIAMETRE_CAMEMBERT, DIAMETRE_CAMEMBERT, PApplet.radians(total), PApplet.radians(total + (360 - total)));
+
+            drawTextCamembert(camCenterX, camCenterY, total, 360 - total, "Vote blanc ou non voté");
+        }
+
         for (TextPos tp : textPosList)
         {
             fill(tp.color.getRGB());
@@ -170,14 +187,6 @@ public class Main extends PApplet
 
             fill(0);
             text(tp.text, tp.x, tp.y);
-        }
-
-        if(total > 0)
-        {
-            fill(Color.WHITE.getRGB());
-            arc(camCenterX, camCenterY, DIAMETRE_CAMEMBERT, DIAMETRE_CAMEMBERT, PApplet.radians(total), PApplet.radians(total + (360 - total)));
-
-            drawTextCamembert(camCenterX, camCenterY, total, 360 - total, "Vote blanc ou non voté");
         }
     }
 
@@ -194,7 +203,7 @@ public class Main extends PApplet
                 y + ((RAYON_CAMEMBERT + 10) * sinVal));
     }
 
-    private class TextPos
+    private static class TextPos
     {
         public String text;
         public float x;
