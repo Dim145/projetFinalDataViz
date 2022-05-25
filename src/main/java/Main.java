@@ -33,6 +33,7 @@ public class Main extends PApplet
     private PImage background = null;
     private Table datas = null;
     private Table percentDatas = null;
+    private Integrator[][] integrators = null;
 
     private int currentTour = 1;
 
@@ -51,6 +52,15 @@ public class Main extends PApplet
     @Override
     public void draw()
     {
+        for (int i = 0; i < this.integrators.length; i++)
+        {
+            for (int j = 0; j < this.integrators[i].length; j++)
+            {
+                if(this.integrators[i][j] != null)
+                    this.integrators[i][j].update();
+            }
+        }
+
         background(255);
         image(background, 0, 0, width, height);
 
@@ -98,6 +108,33 @@ public class Main extends PApplet
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+
+        if(this.integrators == null)
+            this.integrators = new Integrator[percentDatas.getRowCount()-1][12];
+
+        for (int i = 0; i < this.integrators.length; i++)
+        {
+            int index = 3;
+
+            while(true)
+            {
+                float val = Float.NaN;
+
+                try{
+                    val = percentDatas.getFloat(i, index);
+                }
+                catch (Exception ignored){}
+
+                if(Float.isNaN(val)) break;
+
+                if(this.integrators[i][index/3-1] == null)
+                    this.integrators[i][index/3-1] = new Integrator(val);
+                else
+                    this.integrators[i][index/3-1].target(val);
+
+                index += 3;
+            }
         }
     }
 
@@ -205,7 +242,7 @@ public class Main extends PApplet
         int i2 = percentDatas.getRowIndex(code);
         while(true) try
         {
-            float val = percentDatas.getFloat(i2, index);
+            float val = this.integrators[i2][index/3-1].getValue();// percentDatas.getFloat(i2, index);
             if(Float.isNaN(val)) break;
 
             val = PApplet.map(val, 0, 100, 0, 360);
