@@ -1,4 +1,5 @@
 # Projet DataViz 2022
+### Auteur: Dimiri Dubois
 
 Nous nous proposons de réaliser une cartographie interactive des résultats des dernières élections présidentielles en France.
 
@@ -18,3 +19,4 @@ Vous trouverez les données sur le site Open Data suivant :
 
 Les données au format `txt` sont des fichiers où les champs sont séparés par des points-virgules.
 
+commande maven de lancement: `maven compile exec:java -Dfile.encoding=utf-8 -Dexec.mainClass=Main`

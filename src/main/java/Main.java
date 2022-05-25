@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 
 public class Main extends PApplet
@@ -19,9 +21,12 @@ public class Main extends PApplet
                                             new Color(147, 0, 255), new Color(25, 222, 184), new Color(215, 0, 92), new Color(
             255, 157, 75)};
 
-    public static final float RATIO = 2;
+    public static final float RATIO = 1.5f;
     public static final float DIAMETRE_CAMEMBERT = 200;
     public static final float RAYON_CAMEMBERT = DIAMETRE_CAMEMBERT / 2;
+
+    public static final int POSX_TAB_CANDIDAT = 15;
+    public static final int POSY_TAB_CANDiDAT = 15;
 
     private boolean isDepartement = true;
 
@@ -75,6 +80,7 @@ public class Main extends PApplet
                 fill(0);
                 text(text, mouseX, mouseY);
 
+                drawTab(i);
                 drawCamenbert(i);
             }
         }
@@ -93,6 +99,72 @@ public class Main extends PApplet
         {
             e.printStackTrace();
         }
+    }
+
+    private void drawTab(int i)
+    {
+        String code = datas.getString(i, isDepartement ? 0 : 9);
+        try
+        {
+            code = switch (code)
+            {
+                case "971" -> "ZA";
+                case "972" -> "ZB";
+                case "973" -> "ZC";
+                case "974" -> "ZD";
+                case "976" -> "ZM";
+                default -> String.format("%02d", Integer.parseInt(code));
+            };
+        }
+        catch (NumberFormatException ignored)
+        {
+
+        }
+
+        int i2 = percentDatas.getRowIndex(code);
+
+        HashMap<String, Color> candidats = new HashMap<>();
+
+        int index = 1;
+        while(true)
+        {
+            String candidat = null;
+
+            try
+            {
+                candidat = percentDatas.getString(i2, index) + " ( " + percentDatas.getString(i2, index + 2) + " % )";
+            }
+            catch (Exception ignored) {}
+
+            if(candidat == null || candidat.isBlank())
+                break;
+
+            if(!candidats.containsKey(candidat))
+                candidats.put(candidat, COLORS[((index+2)/3) % COLORS.length]);
+
+            index += 3;
+        }
+
+        float maxWidth = (float) candidats.keySet().stream().mapToDouble(this::textWidth).max().orElse(0);
+        int nbCandidat = candidats.size();
+
+        noStroke();
+        fill(Color.LIGHT_GRAY.getRGB());
+        rect(POSX_TAB_CANDIDAT, POSY_TAB_CANDiDAT, maxWidth + 45, (textAscent() + textDescent()) * nbCandidat + 10, 5);
+
+        float currentY = 5;
+        for (String candidat : candidats.keySet())
+        {
+            Color c = candidats.get(candidat);
+
+            fill(c.getRGB());
+            rect(POSX_TAB_CANDIDAT + 10, POSY_TAB_CANDiDAT + currentY, 10, 10 );
+            fill(0);
+            text(candidat, POSX_TAB_CANDIDAT + 25, POSY_TAB_CANDiDAT + currentY + textAscent() - textDescent()/1.5f);
+
+            currentY += textAscent() + textDescent();
+        }
+        stroke(0);
     }
 
     private void drawCamenbert(int lig)
