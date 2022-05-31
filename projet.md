@@ -20,3 +20,7 @@ Vous trouverez les données sur le site Open Data suivant :
 Les données au format `txt` sont des fichiers où les champs sont séparés par des points-virgules.
 
 commande maven de lancement: `maven compile exec:java -Dfile.encoding=utf-8 -Dexec.mainClass=Main`
+
+rappel:
+clic de souris = changer de tour
+appui sur barre espace = changer de vue (département/région)

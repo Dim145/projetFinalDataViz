@@ -3,11 +3,8 @@ import processing.core.PImage;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 
@@ -98,7 +95,7 @@ public class Main extends PApplet
 
     private void loadDatas()
     {
-        background = loadImage(isDepartement ? "France_départementale.png" : "france_departementale.jpg");
+        background = loadImage(isDepartement ? "France_departementale.png" : "france_departementale.jpg");
         datas = new Table(this, isDepartement ? "departements-francais.tsv" : "regions-francaises.tsv");
 
         try
@@ -143,15 +140,15 @@ public class Main extends PApplet
         String code = datas.getString(i, isDepartement ? 0 : 9);
         try
         {
-            code = switch (code)
+            switch (code)
             {
-                case "971" -> "ZA";
-                case "972" -> "ZB";
-                case "973" -> "ZC";
-                case "974" -> "ZD";
-                case "976" -> "ZM";
-                default -> String.format("%02d", Integer.parseInt(code));
-            };
+                case "971": code =  "ZA";break;
+                case "972": code =  "ZB";break;
+                case "973": code =  "ZC";break;
+                case "974": code =  "ZD";break;
+                case "976": code =  "ZM";break;
+                default: code =  String.format("%02d", Integer.parseInt(code));
+            }
         }
         catch (NumberFormatException ignored)
         {
@@ -173,7 +170,7 @@ public class Main extends PApplet
             }
             catch (Exception ignored) {}
 
-            if(candidat == null || candidat.isBlank())
+            if(candidat == null || candidat.isEmpty())
                 break;
 
             if(!candidats.containsKey(candidat))
@@ -222,15 +219,15 @@ public class Main extends PApplet
 
         try
         {
-            code = switch (code)
+            switch (code)
             {
-                case "971" -> "ZA";
-                case "972" -> "ZB";
-                case "973" -> "ZC";
-                case "974" -> "ZD";
-                case "976" -> "ZM";
-                default -> String.format("%02d", Integer.parseInt(code));
-            };
+                case "971": code = "ZA";break;
+                case "972": code = "ZB";break;
+                case "973": code = "ZC";break;
+                case "974": code = "ZD";break;
+                case "976": code = "ZM";break;
+                default: code = String.format("%02d", Integer.parseInt(code));
+            }
         }
         catch (NumberFormatException ignored)
         {
@@ -243,7 +240,10 @@ public class Main extends PApplet
         while(true) try
         {
             float val = this.integrators[i2][index/3-1].getValue();// percentDatas.getFloat(i2, index);
-            if(Float.isNaN(val)) break;
+
+            String text = percentDatas.getString(i2, index-1);
+
+            if(Float.isNaN(val) || text == null || text.isEmpty()) break;
 
             val = PApplet.map(val, 0, 100, 0, 360);
 
@@ -254,8 +254,6 @@ public class Main extends PApplet
             {
                 fill(0);
                 float degText = total + (val / 2);
-
-                String text = percentDatas.getString(i2, index-1);
 
                 float sinVal = sin(PApplet.radians(degText));
                 float cosVal = cos(PApplet.radians(degText));
